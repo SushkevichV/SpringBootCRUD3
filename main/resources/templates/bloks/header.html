@@ -1,0 +1,28 @@
+<!-- этот тэг нужет для отображения кириллицы -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<div th:fragment="header">
+	<!-- модуль <div> скопирован с сайта https://getbootstrap.com/docs/5.1/examples/pricing/ -->
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 border-bottom">
+      <h5 class="fs-4">Blog</h5>
+
+      <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+        <a class="me-3 py-2 text-dark text-decoration-none" href="/">Главная</a>
+        <a class="me-3 py-2 text-dark text-decoration-none" href="/blog">Блог</a>
+        <a class="me-3 py-2 text-dark text-decoration-none" href="/blog/add">Добавить статью</a>
+        <a class="me-3 py-2 text-dark text-decoration-none" href="/about">Про нас</a>
+      </nav>
+    </div>
+</div>
+
+<div th:fragment="footer">
+	<!-- модуль <footer> скопирован с сайта https://getbootstrap.com/docs/5.1/examples/pricing/ -->
+	<footer class="text-muted py-5">
+	  <div class="container">
+	    <p class="float-end mb-1">
+	      <a href="#">Back to top</a>
+	    </p>
+	    <p class="mb-1">Album example is © Bootstrap, but please download and customize it for yourself!</p>
+	    <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="/docs/5.1/getting-started/introduction/">getting started guide</a>.</p>
+	  </div>
+	</footer>
+</div>
