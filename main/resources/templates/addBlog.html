@@ -11,10 +11,21 @@
  
  <div class="container mt-5 mb-5">
   <h1>Добавление статьи</h1>
-  <form action="/blog/add" method="post">
-  	<input type="text" name="title" placeholder="Заголовок" class="form-control"><br>
-  	<input type="text" name="anons" placeholder="Кратое описание" class="form-control"><br>
-  	<textarea name="text" placeholder="Текст" class="form-control"></textarea><br>
+  <!-- <form action="/blog/add" method="post"> -->
+  <!-- th:action="@{/blog/add}" должен совпадать с адресом @PostMapping, иначе "Request method 'POST' not supported" -->
+  <form th:method="POST" th:action="@{/blog/add}" th:object="${post}">
+  	<!-- <input type="text" name="title" placeholder="Заголовок" class="form-control"><br> -->
+  	<input type="text" th:field="*{title}" id="title" placeholder="Заголовок" class="form-control"/>
+  	<div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Ошибка в поле title</div>
+  	<br>
+  	<!-- <input type="text" name="anons" placeholder="Кратое описание" class="form-control"><br> -->
+  	<input type="text" th:field="*{anons}" id="anons" placeholder="Кратое описание" class="form-control"/>
+  	<div style="color:red" th:if="${#fields.hasErrors('anons')}" th:errors="*{anons}">Ошибка в поле anons</div>
+  	<br>
+  	<!-- <textarea name="text" placeholder="Текст" class="form-control"></textarea><br> -->
+  	<textarea th:field="*{text}" id="text" placeholder="Текст" class="form-control"></textarea>
+  	<div style="color:red" th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Ошибка в поле anons</div>
+  	<br>
   	<button type="submit" class="btn btn-success">Добавить статью</button>
   </form>
 	  

@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,12 +42,22 @@ public class BlogController {
 	@GetMapping("/blog/add") 
 	public String addBlog(Model model) {
 		model.addAttribute("title", "Новая статья");
+		model.addAttribute("post", new Post()); // передать в форму Post
 		return "addBlog";
 	}
 	
 	@PostMapping("/blog/add") // отслеживание post-запроса
-	public String newPost(@RequestParam String title, @RequestParam String anons, @RequestParam String text, Model model) {
+	/*public String newPost(@RequestParam String title, @RequestParam String anons, @RequestParam String text, Model model) {
 		Post post = new Post(title, anons, text);
+		//postRepositoryCRUD.save(post);
+		postRepositoryJPA.save(post);
+		return "redirect:/blog"; // переадресация на страницу
+	}
+	*/
+	public String newPost(@ModelAttribute("post") @Valid Post post, BindingResult br, @RequestParam String title, @RequestParam String anons, @RequestParam String text, Model model) {
+		if(br.hasErrors())
+			return "addBlog";
+		post = new Post(title, anons, text);
 		//postRepositoryCRUD.save(post);
 		postRepositoryJPA.save(post);
 		return "redirect:/blog"; // переадресация на страницу
@@ -82,23 +96,39 @@ public class BlogController {
 		}
 		
 		// Дальше идет странный блок. Оставлю как пример, может пригодиться
-		//Optional<Post> post = postRepositoryCRUD.findById(id); // почему-то Optional нельзя передать в Model
-		Optional<Post> post = postRepositoryJPA.findById(id);
+		//Optional<Post> postOptional = postRepositoryCRUD.findById(id); // почему-то Optional нельзя передать в Model
+		Optional<Post> postOptional = postRepositoryJPA.findById(id);
 		ArrayList<Post> posts = new ArrayList<>(); // нужно создать массив
-		post.ifPresent(posts::add); // и туда положить этот Optional
+		postOptional.ifPresent(posts::add); // и туда положить этот Optional
 		
-		// хотя можно получить доступ к полям и передать их в Model
-		model.addAttribute("title", post.get().getTitle());
-		
-		model.addAttribute("posts", posts);
+		Post post = postOptional.get(); //извлечь Post из Optional
+		model.addAttribute("title", post.getTitle());
+		model.addAttribute("post", post);
 		
 		return "/editPost";
 	}
 	
 	@PostMapping("/blog/{id}/edit") // отслеживание post-запроса
-	public String updatePost(@PathVariable(value = "id") long id, @RequestParam String title, @RequestParam String anons, @RequestParam String text, Model model) {
+	
+	/*public String updatePost(@ModelAttribute("post") @Valid Post post, BindingResult br, @PathVariable(value = "id") long id, @RequestParam String title, @RequestParam String anons, @RequestParam String text, Model model) {
 		// Получить объект Post
-		Post post = postRepositoryJPA.findById(id).orElseThrow(); // выбрасывает исключение, если объект не был найден
+		if(br.hasErrors())
+			return "editPost";
+		post = postRepositoryJPA.findById(id).orElseThrow(); // выбрасывает исключение, если объект не был найден
+																 // т.к. findById возвращает Optional, т.е. объект может быть, а может и не быть
+		post.setTitle(title);
+		post.setAnons(anons);
+		post.setText(text);
+		
+		postRepositoryJPA.save(post); // заменяет существующую запись
+		return "redirect:/blog"; // переадресация на страницу
+	}
+	*/
+	public String updatePost(@ModelAttribute("post") @Valid Post post, BindingResult br, @PathVariable(value = "id") long id, @RequestParam String title, @RequestParam String anons, @RequestParam String text, Model model) {
+		// Получить объект Post
+		if(br.hasErrors())
+			return "editPost";
+		post = postRepositoryJPA.findById(id).orElseThrow(); // выбрасывает исключение, если объект не был найден
 																 // т.к. findById возвращает Optional, т.е. объект может быть, а может и не быть
 		post.setTitle(title);
 		post.setAnons(anons);

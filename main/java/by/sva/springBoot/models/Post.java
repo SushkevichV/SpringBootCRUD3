@@ -5,16 +5,30 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 // должен создть таблицу в БД, если ее нет. НО НЕ СОЗДАЕТ. MySQL создает
+// таблицу person создал!!!
 
 @Entity
-// @Table(name = "post') // вроде нужно указывать, но без нее тоже работает
+// @Table(name = "post") // нужно указывать, если не совпадает с названием таблицы
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO) // уникальный сгенерированный идентификатор
 	private long id;
+	
+	@NotEmpty(message = "Заголовок не должен быть пустым")
+	//@Size(min=1, max=50, message = "Заголовок должен быть не более 50 символов")
 	private String title;
+	
+	@NotEmpty(message = "Поле не должно быть пустым")
 	private String anons;
+	
+	@NotEmpty(message = "Поле не должно быть пустым")
 	private String text;
 	private int views;
 	
