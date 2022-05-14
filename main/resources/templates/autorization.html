@@ -12,7 +12,6 @@
  <div class="container mt-5 mb-5">
   <h1>Авторизация пользователя</h1>
   
-  <!-- th:action="@{/enter}" должен совпадать с адресом @PostMapping, иначе "Request method 'POST' not supported" -->
   <form th:method="POST" th:action="@{/enter}" th:object="${person}">
   	<input type="text" th:field="*{name}" id="name" placeholder="Имя" class="form-control"/>
   	<div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Ошибка в поле name</div>
