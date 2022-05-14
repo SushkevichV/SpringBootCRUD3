@@ -20,13 +20,13 @@ public class MainController {
 		return "home";
 	}
 
-	@GetMapping("/about") // домашняя страница
+	@GetMapping("/about") 
 	public String about(Model model) {
 		model.addAttribute("title", "Cтраница про нас");
 		return "about";
 	}
 	
-	@GetMapping("/enter") // домашняя страница
+	@GetMapping("/enter") 
 	public String enter(Model model) {
 		model.addAttribute("title", "Авторизация");
 		model.addAttribute("person", new Person()); // передать в форму Person
